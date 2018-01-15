@@ -52,7 +52,8 @@ poi  = "poi"
 features_list = [poi, feature_1, feature_2]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
-
+print(sorted(data[:,-2]))
+print(sorted(data[:,-1]))
 
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
@@ -64,7 +65,9 @@ plt.show()
 
 ### cluster here; create predictions of the cluster labels
 ### for the data and store them to a list called pred
-
+from sklearn.cluster import KMeans
+clf = KMeans(n_clusters=2, random_state=0).fit(finance_features, poi)
+pred = clf.labels_
 
 
 
