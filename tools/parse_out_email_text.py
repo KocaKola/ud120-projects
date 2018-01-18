@@ -26,19 +26,24 @@ def parseOutText(f):
     if len(content) > 1:
         ### remove punctuation
         text_string = content[1].translate(string.maketrans("", ""), string.punctuation)
-
+        #print(text_string)
         ### project part 2: comment out the line below
-        words = text_string
-
+        #words = text_string
+        from nltk.stem.snowball import SnowballStemmer
+        stemmer = SnowballStemmer("english")
+        for i in text_string.split():
+            #print(i)
+            words += (stemmer.stem(i))
+            words += " "
         ### split the text string into individual words, stem each word,
         ### and append the stemmed word to words (make sure there's a single
         ### space between each stemmed word)
-        
 
 
 
 
-    return words
+
+    return str(words)
 
     
 
