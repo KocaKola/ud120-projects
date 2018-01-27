@@ -42,7 +42,7 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
         ### only look at first 200 emails when developing
         ### once everything is working, remove this line to run over full dataset
         #temp_counter += 1
-        if temp_counter < 200:
+        if temp_counter < 20:
             path = os.path.join('..', path[:-1])
             print path
             email = open(path, "r")
@@ -53,15 +53,18 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             ### use str.replace() to remove any instances of the words
             ### ["sara", "shackleton", "chris", "germani"]
 
-            for i in ["sara", "shackleton", "chris", "germani"]:
+            for i in ["sara", "shackleton", "chris", "germani", "sshacklensf", "cgermannsf"]:
+                #"houectect", "houston", "houect", "fax", "smith"
                 text = str.replace(text, i, "")
             #print(text)
             ### append the text to word_data
             word_data.append(text)
             ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
-            if from_person == "from_sara":
+            if from_person == from_sara:
+                #print("it's from sara")
                 from_data.append(0)
-            elif from_person == "from_chris":
+            if from_person == from_chris:
+                #print("it's from chris")
                 from_data.append(1)
 
             email.close()
@@ -82,4 +85,4 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer(stop_words="english")
 vectorizer = vectorizer.fit(word_data)
 features = vectorizer.get_feature_names()
-print(features, len(features),features[34597])
+#print(features, len(features),features[34597])

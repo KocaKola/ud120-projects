@@ -38,6 +38,15 @@ labels_train   = labels_train[:150]
 
 
 ### your code goes here
-
-
-
+from sklearn.tree import DecisionTreeClassifier
+regression = DecisionTreeClassifier()
+regression.fit(features_train, labels_train)
+#print(regression.coef_, regression.intercept_)
+accu = regression.score(features_test, labels_test)
+print(accu)
+features_importance = list(regression.feature_importances_)
+max_importance = max(features_importance)
+print(max_importance)
+num = features_importance.index(max_importance)
+print(num)
+print(vectorizer.get_feature_names()[num])
