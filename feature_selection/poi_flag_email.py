@@ -1,14 +1,5 @@
 #!/usr/bin/python
 
-###
-### in poiFlagEmail() below, write code that returns a boolean
-### indicating if a given email is from a POI
-###
-
-import sys
-import reader
-import poi_emails
-
 
 def getToFromStrings(f):
     '''
@@ -18,13 +9,27 @@ def getToFromStrings(f):
     .parseAddresses() line takes each string and extracts the e-mail addresses
     as a list.
     '''
-    f.seek(0)
-    to_string, from_string, cc_string = reader.getAddresses(f)
-    to_emails = reader.parseAddresses(to_string)
-    from_emails = reader.parseAddresses(from_string)
-    cc_emails = reader.parseAddresses(cc_string)
+
+    all_strings = str(f).split("X-From")[0].split(": ")
+
+    from_string = ""
+    to_string = ""
+    cc_string = ""
+    for i in range(len(all_strings)):
+        if from_string == "" and all_strings[i][-4:] == "From":
+            from_string = all_strings[i+1].split(", ")
+        elif to_string == "" and all_strings[i][-2:] == "To":
+            to_string = all_strings[i+1].split(", ")
+        elif cc_string == "" and all_strings[i][-2:] == "Cc":
+            cc_string = all_strings[i+1].split(", ")
+            break
+
+    to_emails = [j for i in [i.split() for i in to_string] for j in i][:-1]
+    from_emails = [j for i in [i.split() for i in from_string] for j in i][:-1]
+    cc_emails = [i.split() for i in cc_string][:-1]
 
     return to_emails, from_emails, cc_emails
+
 
 
 ### POI flag an email
@@ -33,11 +38,13 @@ def poiFlagEmail(f):
     """ given an email file f,
         return a trio of booleans for whether that email is
         to, from, or cc'ing a poi """
-
+    import sys
+    sys.path.append("../final_project/")
+    from poi_email_addresses import poiEmails
     to_emails, from_emails, cc_emails = getToFromStrings(f)
 
     ### poi_emails.poiEmails() returns a list of all POIs' email addresses.
-    poi_email_list = poi_emails.poiEmails()
+    poi_email_list = poiEmails()
 
     to_poi = False
     from_poi = False
